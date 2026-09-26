@@ -7,7 +7,7 @@ DB_DATABASE=laravel
 DB_USERNAME=jorge
 DB_PASSWORD=123456789
 
-correo "email"
+correo "email" (LOCAL - Mailpit, se ve en http://localhost:7653)
 
 MAIL_MAILER=smtp
 MAIL_SCHEME=null
@@ -18,3 +18,29 @@ MAIL_USERNAME=jorge
 MAIL_PASSWORD=123456789
 MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
+
+correo BREVO SMTP (REAL - TP Laravel 13 + Brevo)
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_USERNAME=tu_correo_registrado_en_brevo@ejemplo.com
+MAIL_PASSWORD=tu_smtp_key_de_64_caracteres
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=remitente_verificado@tudominio.com
+MAIL_FROM_NAME="${APP_NAME}"
+
+IMPORTANTE: MAIL_PASSWORD es la SMTP Key de 64 caracteres que se genera en
+Brevo > Settings > SMTP & API > SMTP. NO es la API Key.
+Despues de cambiar el .env ejecutar: php artisan config:clear
+
+COLAS (Queues)
+
+QUEUE_CONNECTION=database
+php artisan migrate          (crea las tablas jobs y failed_jobs - ya migradas)
+php artisan queue:work       (worker que procesa y envia los correos)
+
+Monitoreo de fallos
+php artisan queue:failed
+php artisan queue:retry {id}
+php artisan queue:retry all
